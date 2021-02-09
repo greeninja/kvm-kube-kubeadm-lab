@@ -34,7 +34,7 @@ echo "Creating $netname xml file"
                                                          
 cat <<EOF > $tmp_dir/$netname.xml
 <network>                            
-  <name>netname</name>
+  <name>$netname</name>
   <bridge name="virbr6443"/>
   <forward mode="nat"/>
   <domain name="kubernetes.lab"/>
