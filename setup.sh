@@ -109,6 +109,38 @@ else
     --noautoconsole 
 fi
 
+echo "Building Load Balancer node"
+
+check=$(virsh list --all | grep lb.$dns_domain > /dev/null && echo "0" || echo "1" )
+if [[ $check == "0" ]]; then
+  echo "lb.$dns_domain already exists"
+else
+  echo "Starting LB"
+  echo "Creating $image_dir/lb.$dns_domain.qcow2 at 40G"
+  qemu-img create -f qcow2 $image_dir/lb.$dns_domain.qcow2 $os_drive_size
+  echo "Resizing base OS image"
+  virt-resize --expand /dev/sda1 $base_os_img $image_dir/lb.$dns_domain.qcow2
+  echo "Customising OS for lb"
+  virt-customize -a $image_dir/lb.$dns_domain.qcow2 \
+    --root-password password:$root_password \
+    --uninstall cloud-init \
+    --hostname lb.$dns_domain \
+    --ssh-inject root:file:$ssh_pub_key \
+    --selinux-relabel
+  echo "Defining LB"
+  virt-install --name lb.$dns_domain \
+    --virt-type kvm \
+    --memory 2048 \
+    --vcpus 2 \
+    --boot hd,menu=on \
+    --disk path=$image_dir/lb.$dns_domain.qcow2,device=disk \
+    --os-type Linux \
+    --os-variant centos7 \
+    --network network:$netname \
+    --graphics spice \
+    --noautoconsole
+fi
+
 count=1
 host_prefix="kube-master"
 for i in `seq -w 01 03`; do 

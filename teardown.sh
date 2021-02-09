@@ -2,15 +2,17 @@
 #!/bin/bash                                                                                                                                                          
                                                                                                                                                                      
 # Network Vars                                                                    
-dns_domain="kubernetes-lab"
+dns_domain="kubernetes.lab"
 
 
 ##### Start #####
 
 # Remove the Bastion VM
 
-virsh destroy bastion.$dns_domain
-virsh undefine bastion.$dns_domain --remove-all-storage
+for i in bastion lb; do
+virsh destroy $i.$dns_domain
+virsh undefine $i.$dns_domain --remove-all-storage
+done
 
 # Remove Kube VMs
 
