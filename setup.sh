@@ -122,14 +122,14 @@ for i in `seq -w 01 03`; do
     qemu-img create -f qcow2 $image_dir/$host_prefix$i.$dns_domain.qcow2 $os_drive_size
     echo "Resizing base OS image"
     virt-resize --expand /dev/sda1 $base_os_img $image_dir/$host_prefix$i.$dns_domain.qcow2
-    echo "Customising OS for gluster$i"
+    echo "Customising OS for $host_prefix$i"
     virt-customize -a $image_dir/$host_prefix$i.$dns_domain.qcow2 \
       --root-password password:$root_password \
       --uninstall cloud-init \
       --hostname $host_prefix$i.$dns_domain \
       --ssh-inject root:file:$ssh_pub_key \
       --selinux-relabel
-    echo "Defining gluster$i"
+    echo "Defining $host_prefix$i"
     virt-install --name $host_prefix$i.$dns_domain \
       --virt-type kvm \
       --memory 8192 \
@@ -159,14 +159,14 @@ for i in `seq -w 01 03`; do
     qemu-img create -f qcow2 $image_dir/$host_prefix$i.$dns_domain.qcow2 $os_drive_size
     echo "Resizing base OS image"
     virt-resize --expand /dev/sda1 $base_os_img $image_dir/$host_prefix$i.$dns_domain.qcow2
-    echo "Customising OS for gluster$i"
+    echo "Customising OS for $host_prefix$i"
     virt-customize -a $image_dir/$host_prefix$i.$dns_domain.qcow2 \
       --root-password password:$root_password \
       --uninstall cloud-init \
       --hostname $host_prefix$i.$dns_domain \
       --ssh-inject root:file:$ssh_pub_key \
       --selinux-relabel
-    echo "Defining gluster$i"
+    echo "Defining $host_prefix$i"
     virt-install --name $host_prefix$i.$dns_domain \
       --virt-type kvm \
       --memory 8192 \

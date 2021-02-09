@@ -1,0 +1,25 @@
+---
+
+kube-masters:
+  hosts:
+    kube-master01:
+      ansible_host: 10.44.60.36
+    kube-master02:
+      ansible_host: 10.44.60.56
+    kube-master03:
+      ansible_host: 10.44.60.28
+
+kube-nodes:
+  hosts:
+    kube-node01:
+      ansible_host: 10.44.60.91
+    kube-node02:
+      ansible_host: 10.44.60.55
+    kube-node03:
+      ansible_host: 10.44.60.27
+
+bastion:
+  hosts:
+    bastion:
+      ansible_host: 10.44.60.66
+
