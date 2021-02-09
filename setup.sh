@@ -91,6 +91,7 @@ else
   virt-customize -a $image_dir/bastion.$dns_domain.qcow2 \
     --root-password password:$root_password \
     --uninstall cloud-init \
+    --install bind-utils \
     --hostname bastion.$dns_domain \
     --ssh-inject root:file:$ssh_pub_key \
     --selinux-relabel
