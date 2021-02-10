@@ -1,7 +1,7 @@
 ---
 
 - name: Setup Kubeadm Playbook
-  hosts: all
+  hosts: all,!load_balancers
   gather_facts: false
   tasks:
     - name: Add Kubernetes repo
