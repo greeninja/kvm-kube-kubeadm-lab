@@ -43,3 +43,34 @@
         state: started
         enabled: true
       
+- name: Setup LB
+  hosts: load_balancers
+  gather_facts: false
+  tasks:
+    - name: Install epel
+      package:
+        name: epel-release
+        state: installed
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+      register: sel
+    - name: Reboot for SELinux
+      reboot:
+        msg: "Rebooted by ansible"
+        reboot_timeout: 300
+      when: sel.changed
+    - name: Install nginx
+      package:
+        name: nginx
+        state: installed
+    - name: Configure Nginx
+      copy:
+        src: nginx.conf
+        dest: /etc/nginx/nginx.conf
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
