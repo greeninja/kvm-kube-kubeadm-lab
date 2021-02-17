@@ -1,0 +1,3 @@
+[submodule "lab-setup"]
+	path = lab-setup
+	url = https://github.com/greeninja/kvm-ansible.git

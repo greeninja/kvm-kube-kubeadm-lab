@@ -28,7 +28,7 @@
         name: "{{ item }}"
         state: installed
       loop:
-        - podman
+        - containerd
         - kubelet
         - kubeadm
         - kubectl
