@@ -23,18 +23,24 @@
         msg: "Rebooted by ansible"
         reboot_timeout: 300
       when: sel.changed
+    - name: Add Docker CE Repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/docker-ce.repo
     - name: Install Packages
       package:
         name: "{{ item }}"
         state: installed
       loop:
-        - containerd
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
         - kubelet
         - kubeadm
         - kubectl
 
 - name: Start Kubelet
-  hosts: kube-masters,kube-nodes
+  hosts: kube_masters,kube_nodes
   gather_facts: false
   tasks:
     - name: Start Kubelet
@@ -65,8 +71,8 @@
         name: nginx
         state: installed
     - name: Configure Nginx
-      copy:
-        src: nginx.conf
+      template:
+        src: nginx.conf.j2
         dest: /etc/nginx/nginx.conf
     - name: Start and enable Nginx
       service:

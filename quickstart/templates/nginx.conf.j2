@@ -13,23 +13,23 @@ events {
 stream {
   upstream kube_api {
     least_conn;
-    server kube-master01:6443 max_fails=2 fail_timeout=10s;
-    server kube-master02:6443 max_fails=2 fail_timeout=10s;
-    server kube-master03:6443 max_fails=2 fail_timeout=10s;
+    {% for host in groups['kube_masters'] %}
+    server {{ hostvars[host]['inventory_hostname_short'] }}:6443 max_fails=2 fail_timeout=10s;
+    {% endfor %}
   }
 
   upstream http_lb {
     least_conn;
-    server kube-worker01:80 max_fails=3 fail_timeout=10s;
-    server kube-worker02:80 max_fails=3 fail_timeout=10s;
-    server kube-worker03:80 max_fails=3 fail_timeout=10s;
+    {% for host in groups['kube_nodes'] %}
+    server {{ hostvars[host]['inventory_hostname_short'] }}:80 max_fails=3 fail_timeout=10s;
+    {% endfor %}
   }
 
   upstream https_lb {
     least_conn;
-    server kube-worker01:443 max_fails=3 fail_timeout=10s;
-    server kube-worker02:443 max_fails=3 fail_timeout=10s;
-    server kube-worker03:443 max_fails=3 fail_timeout=10s;
+    {% for host in groups['kube_nodes'] %}
+    server {{ hostvars[host]['inventory_hostname_short'] }}:443 max_fails=3 fail_timeout=10s;
+    {% endfor %}
   }
 
   server {
