@@ -38,11 +38,17 @@
         - kubelet
         - kubeadm
         - kubectl
+        - iscsi-initiator-utils
 
-- name: Start Kubelet
+- name: Start Docker and Kubelet
   hosts: kube_masters,kube_nodes
   gather_facts: false
   tasks:
+    - name: Start Docker
+      service:
+        name: docker
+        state: started
+        enabled: true
     - name: Start Kubelet
       service:
         name: kubelet
